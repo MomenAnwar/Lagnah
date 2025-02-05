@@ -253,7 +253,7 @@ const Users = () => {
       </div>
     </div>
 
-      <div className="col-12 overflow-hidden">
+      <div className="col-12 overflow-auto">
       <Table striped bordered hover>
       <thead>
         <tr>

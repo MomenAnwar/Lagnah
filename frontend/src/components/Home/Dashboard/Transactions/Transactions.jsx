@@ -1,16 +1,19 @@
-import { Button, Empty, Image, Typography } from "antd";
+import { Empty, Image, Typography } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { SetSelected } from "../../../../Contexts/SetSelectedContext";
 import { TRANSACTION_API } from "../../../../APIS";
 import Swal from "sweetalert2";
-import { Spinner } from "react-bootstrap";
+import { Button, Form, InputGroup, Spinner } from "react-bootstrap";
+import { TbDeviceIpadDollar } from "react-icons/tb";
+import { IoSearch } from "react-icons/io5";
 
 const Transactions = () => {
 
     const {setSelectedDashboard} = useContext(SetSelected)
 
     const [transactions, setTransactions] = useState([])
+    const [activeTransactions, setActiveTransactions] = useState([])
     const [loading, setLoading] = useState(true)
 
     const navigate = useNavigate()
@@ -23,6 +26,7 @@ const Transactions = () => {
       .then(data => {
           if(data.success){
             setTransactions(data.data)
+            setActiveTransactions(data.data)
             setLoading(false)
           } else if(data.data.name === 'JsonWebTokenError'){
                     Swal.fire({
@@ -41,11 +45,24 @@ const Transactions = () => {
               </div>
     }
 
-
-  
-
   return (
   <div>
+    <div className="flex px-3 py-2 bg-white mb-3 align-content-center">
+      <div className="hover:text-[#0c969c] text-2xl cursor-pointer" onClick={()=> navigate('add')}> <TbDeviceIpadDollar className="inline ml-3" /></div>
+      <div>
+          <InputGroup dir="ltr">
+        <Button variant="outline-secondary" id="button-addon3">
+          <IoSearch />
+        </Button>
+        <Form.Control
+          onChange={(e)=> {
+            setActiveTransactions(transactions?.filter(transaction => transaction.title.toLowerCase().includes(e.target.value.toLowerCase()) 
+                                                        || transaction.content.toLowerCase().includes(e.target.value.toLowerCase())))
+          }}
+        />
+      </InputGroup>
+      </div>
+    </div>
     <div>
       <Outlet />
     </div>
@@ -61,10 +78,10 @@ const Transactions = () => {
         </Typography.Text>
       }
     >
-      <Button type="primary" onClick={()=> {navigate('add')}}>أضف الآن</Button>
+      <Button variant="primary" onClick={()=> {navigate('add')}}>أضف الآن</Button>
     </Empty>
     :<>
-      {transactions?.map((transaction, i) => (
+      {activeTransactions?.map((transaction, i) => (
         <div key={i} className="col-12 col-md-6 col-lg-4 px-2 pb-2">
         <div className="bg-white rounded-lg p-2 hover:scale-105" style={{fontFamily: 'Cairo', transitionDuration: '0.5s'}}>
           <div className="flex justify-between p-2">
@@ -104,7 +121,7 @@ const Transactions = () => {
                       </thead>
                       <tbody>
                 {transaction.consumers.map((consumer, i) => {
-                  if (i===transaction.consumers.length-1){
+                  if (i >= transaction.consumers.length/2 - 1){
                     return(<></>)
                   }
                   return(
@@ -119,7 +136,7 @@ const Transactions = () => {
               <hr />
             </div>
             }
-          <div className="flex flex-wrap p-2">
+          <div className="flex flex-wrap p-2 gap-3">
             {transaction.images?.map((image, i) => (
               <div key={i} className="col-6">
                 <Image src={image.url}/>

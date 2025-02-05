@@ -94,7 +94,7 @@ const AddTransaction = () => {
             body: JSON.stringify({amount: values.amount, 
                                   type, 
                                   isFinance,
-                                  ...(!isFinance && values.seedsType),
+                                  ...(!isFinance && {seedsType: values.seedsType}),
                                   ...(type === 'outgoing' ? {targetDescription: values.targetDescription, consumers} : {depositeSource: values.depositeSource}),
                                   ...(files.length > 0 && {images: files})
                                 }),
@@ -345,6 +345,7 @@ const AddTransaction = () => {
         steps={maxSteps}
         position="static"
         activeStep={activeStep}
+        className='mb-3'
         nextButton={
           <Button
             size="small"

@@ -71,7 +71,7 @@ const Consumers = () => {
                                     age: values.age,
                                     income: values.income,
                                     childrenCount: values.childrenCount,
-                                    partenername: values.partenername
+                                    partenerName: values.partenerName
               }),
               credentials: 'include'})
           .then( res => res.json())
@@ -406,7 +406,7 @@ const Consumers = () => {
         <Button onClick={()=> setTableData(consumers)} variant='success' className='mx-3'>الكل</Button>
       </div>
 
-        <div className="col-12">
+        <div className="col-12 overflow-auto">
       <Table striped bordered hover>
       <thead>
         <tr>
@@ -468,8 +468,8 @@ const Consumers = () => {
               <td className="text-ellipsis">{consumer.phoneNumber}</td>
               <td className="text-ellipsis">{consumer.age}</td>
               <td className="text-ellipsis">{consumer.income}</td>
-              <td className="text-ellipsis">{consumer.financeConsumed}</td>
-              <td className="text-ellipsis">{consumer.seedsConsumed}</td>
+              <td className="text-ellipsis">{consumer.financeConsumed || 0}</td>
+              <td className="text-ellipsis">{consumer.seedsConsumed || 0}</td>
             
               <td className="flex gap-x-2"> 
                 {<button className="bg-red-500 text-white px-2 py-1 rounded-lg"

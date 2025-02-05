@@ -295,7 +295,7 @@ const deletepost = (id) => {
               id='images'
             />
             </div>
-            <div className="col-12 flex flex-wrap">
+            <div className="col-12 flex flex-wrap gap-2">
               {files.map(img => (
                 <div key={img}>
                   <MdCancel onClick={() => setFiles(files.filter(file => file !== img))} className='cursor-pointer text-[#0c969c]'/>

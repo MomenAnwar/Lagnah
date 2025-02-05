@@ -2,6 +2,7 @@ const Consumer = require("../models/consumer")
 const Finance = require("../models/Finance")
 const Transaction = require("../models/Transaction")
 const { validateTransaction } = require("../utils/joi")
+const cloudinary = require("../libs/cloudinary");
 
 
 const addTransaction = async (req, res) => {
@@ -10,8 +11,9 @@ const addTransaction = async (req, res) => {
         if(error){
             return res.status(400).json({success: false, data: error.details[0].message})
         }
+        let cloudinaryResponse = null
         
-        const { amount, seedsType, type, consumers, targetDescription, depositeSource, isFinance } = req.body
+        const { amount, seedsType, type, consumers, targetDescription, depositeSource, isFinance, images } = req.body
         const reqAmount = parseInt(amount)
 
         const newTransaction = new Transaction(req.body)
@@ -131,8 +133,19 @@ const addTransaction = async (req, res) => {
                     seed.amount += reqAmount
                 }
             }
-        }
-        console.log(newTransaction.consumers);
+        }        
+
+        if(images) {
+                    cloudinaryResponse = images.map(async (img) => {
+                        const res=  await cloudinary.uploader.upload(img, { folder: "transactions" })
+                        return {public_id: res?.public_id,
+                                url: res?.secure_url}
+                    })
+                }
+                console.log(cloudinaryResponse);
+                
+        newTransaction.images = cloudinaryResponse ? await Promise.all(cloudinaryResponse) : []
+        console.log(newTransaction.images);
         
 
 
