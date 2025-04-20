@@ -60,12 +60,12 @@ const Contact = () => {
 
 
   return (
-    <div style={{ backgroundImage: `url('http://localhost:5173/wallpaper/wallpaper.jpg')`, backgroundSize: 'cover', width: '100%', height: 'calc(100vh - 88px'}  }
+    <div style={{ backgroundImage: `url('https://lagnah.vercel.app/wallpaper/wallpaper.jpg')`, backgroundSize: 'cover', width: '100%', height: 'calc(100vh - 88px'}  }
       className='flex align-items-center'>
     <Container>
       <div className='p-3 flex-row flex-wrap bg-white flex col-12 col-md-7 mx-auto justify-around rounded align-items-center' style={{height: '500px'}}>
         <div className='col-12 col-md-6'>
-          <img src="http://localhost:5173/assets/contact.jpg" alt="" className='fluid'/>
+          <img src="https://lagnah.vercel.app/assets/contact.jpg" alt="" className='fluid'/>
         </div>
 
 

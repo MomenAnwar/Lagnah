@@ -241,7 +241,7 @@ const deletepost = (id) => {
       </InputGroup>
       </div>
             {!userData.user? <div className="hidden lg:block">
-                                <Image src="http://localhost:5173/assets/posts.jpg" />
+                                <Image src="https://lagnah.vercel.app/assets/posts.jpg" />
                               </div> 
                               : 
               userData.user.isAdmin? <><Button className={`bg-[#0c969c] hover:bg-[#031716] border-0 w-full ${editing && 'hidden'}`} style={{fontFamily: 'Cairo'}}

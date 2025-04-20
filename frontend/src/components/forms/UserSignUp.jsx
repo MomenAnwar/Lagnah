@@ -113,7 +113,7 @@ const UserSignUp = () => {
   
   return (
     <>
-<div style={{ backgroundImage: `url('http://localhost:5173/wallpaper/wallpaper.jpg')`, backgroundSize: 'cover', width: '100%', height: '100vh'}}
+<div style={{ backgroundImage: `url('https://lagnah.vercel.app/wallpaper/wallpaper.jpg')`, backgroundSize: 'cover', width: '100%', height: '100vh'}}
       className='flex align-items-center'>
     <Container className='p-3'>
       <form onSubmit={formik.handleSubmit} className='col-12 col-md-5 mx-auto flex gap-4 flex-col rounded-lg p-5 bg-white' dir='rtl'>

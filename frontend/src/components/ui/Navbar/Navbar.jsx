@@ -38,7 +38,7 @@ const Header = () => {
   <Container>
     <Navbar rounded className="flex align-middle">
       <Navbar.Brand className="w-14 h-14">
-        <img src="http://localhost:5173/assets/logo.webp" className="" alt="Logo" />
+        <img src="https://lagnah.vercel.app/assets/logo.webp" className="" alt="Logo" />
       </Navbar.Brand>
       <div className="flex md:order-2 gap-3">
       {userData.user?  
