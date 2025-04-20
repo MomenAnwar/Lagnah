@@ -1,4 +1,4 @@
-const Consumer = require("../models/consumer")
+const Consumer = require("../models/Consumer")
 const Finance = require("../models/Finance")
 const Transaction = require("../models/Transaction")
 const { validateTransaction } = require("../utils/joi")

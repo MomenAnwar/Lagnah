@@ -1,4 +1,4 @@
-const Consumer = require("../models/consumer")
+const Consumer = require("../models/Consumer")
 const { validateConsumer } = require("../utils/joi")
 
 
