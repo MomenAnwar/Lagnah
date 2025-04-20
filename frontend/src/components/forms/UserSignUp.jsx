@@ -2,7 +2,6 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Button, TextField} from '@mui/material';
 import { Container } from 'react-bootstrap'
-import { USER_API } from '../../APIS'
 import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AccountCircle } from '@mui/icons-material';
@@ -48,7 +47,7 @@ const UserSignUp = () => {
       
       setLoading(true)
 
-      const res = await fetch(USER_API + '/verify', {
+      const res = await fetch(import.meta.env.VITE_USER_API + '/verify', {
         method: "POST", 
         body: JSON.stringify({email: values.email}), 
         headers: { 'Content-Type': 'application/json' }})
@@ -70,7 +69,7 @@ const UserSignUp = () => {
             
           if(data.success){            
             if(!loading && parseInt(data.data) === parseInt(code)){
-              fetch(USER_API + '/register', {method: "POST", 
+              fetch(import.meta.env.VITE_USER_API + '/register', {method: "POST", 
                 headers: { 'Content-Type': 'application/json' }, 
                 body: JSON.stringify({name: values.name, email: values.email, password: values.password}),
                 credentials: 'include'})

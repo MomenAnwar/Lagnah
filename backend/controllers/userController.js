@@ -266,6 +266,9 @@ const deleteUser = async (req, res) => {
         if(!user){
             return res.status(404).json({success: false, data: 'هذا المستخدم غير موجود!'})
         }
+        if (user.isAdmin || user._id === req.user){
+            return res.status(404).json({success: false, data: 'لا يمكن حذف المسئولين!'})
+        }
         await User.findByIdAndDelete(req.params.id)
         return res.status(200).json({success: true, data: 'تم حذف المستخدم!'})
     } catch (error) {

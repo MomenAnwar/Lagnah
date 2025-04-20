@@ -19,6 +19,7 @@
     "@mui/x-data-grid": "^7.23.2",
     "antd": "^5.22.5",
     "bootstrap": "^5.3.3",
+    "dotenv": "^16.5.0",
     "flowbite-react": "^0.10.2",
     "form-data": "^4.0.1",
     "formik": "^2.4.6",

@@ -23,6 +23,9 @@ const transactionSchema = new mongoose.Schema({
     seedsType: {
         type: String
     },
+    isSeeds: {
+        type: Boolean
+    },
     consumers: [{
         consumer: {
             type: mongoose.Schema.Types.ObjectId,

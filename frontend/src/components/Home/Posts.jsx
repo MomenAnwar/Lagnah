@@ -3,7 +3,6 @@ import { useContext, useEffect, useRef, useState } from "react"
 import { SetSelected } from "../../Contexts/SetSelectedContext"
 import { MdEditNote, MdOutlinePostAdd } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import { POST_API } from "../../APIS";
 import * as yup from 'yup';
 import { useFormik } from "formik";
 import Swal from "sweetalert2";
@@ -67,7 +66,7 @@ const deletepost = (id) => {
   }).then((result) => {
     if (result.isConfirmed) {
 
-      fetch(POST_API + '/' + id, {
+      fetch(import.meta.env.VITE_POST_API + '/' + id, {
         method: 'DELETE',
         credentials: 'include',
       })
@@ -142,7 +141,7 @@ const deletepost = (id) => {
             onSubmit: async (values) => {                      
                 setLoading(true)
                 if(editing){
-                  fetch(POST_API + '/' + id, {method: "PUT", 
+                  fetch(import.meta.env.VITE_POST_API + '/' + id, {method: "PUT", 
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({...values, images: files}),
                     credentials: 'include'})
@@ -164,7 +163,7 @@ const deletepost = (id) => {
                           }
                         })
                 } else {                
-                const res = await fetch(POST_API, {method: "POST", 
+                const res = await fetch(import.meta.env.VITE_POST_API, {method: "POST", 
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({...values, images: files}),
                     credentials: 'include'})
@@ -190,7 +189,7 @@ const deletepost = (id) => {
     
       useEffect(()=>{
         setSelectedNavbar('posts')
-        fetch(POST_API, {credentials: 'include'})
+        fetch(import.meta.env.VITE_POST_API, {credentials: 'include'})
         .then(res => res.json())
         .then(data => {
           if(data.success){
@@ -241,7 +240,11 @@ const deletepost = (id) => {
         />
       </InputGroup>
       </div>
-            {userData.user.isAdmin? <><Button className={`bg-[#0c969c] hover:bg-[#031716] border-0 w-full ${editing && 'hidden'}`} style={{fontFamily: 'Cairo'}}
+            {!userData.user? <div className="hidden lg:block">
+                                <Image src="http://localhost:5173/assets/posts.jpg" />
+                              </div> 
+                              : 
+              userData.user.isAdmin? <><Button className={`bg-[#0c969c] hover:bg-[#031716] border-0 w-full ${editing && 'hidden'}`} style={{fontFamily: 'Cairo'}}
             onClick={()=>{setPosting(!posting)}}
             > {posting? 'رجوع' : 'إضافة منشور '} <MdOutlinePostAdd className="inline"/></Button>
             
@@ -322,7 +325,7 @@ const deletepost = (id) => {
           {activePosts.map((post, index) =>
             {
             return (<div key={post._id} className="bg-white rounded-lg p-3 relative" ref={(el) => (ref.current[index] = el)}>
-            {userData.user.isAdmin && <>
+            {!userData.user? <></> : userData.user.isAdmin ? <>
               <BsThreeDotsVertical className='cursor-pointer absolute' onClick={(event) => handleClick(post._id, event)} />
       <Overlay
         show={activeOverlay === post._id}
@@ -339,7 +342,7 @@ const deletepost = (id) => {
             </ListGroup>
           </Popover.Body>
         </Popover>
-      </Overlay></>}
+      </Overlay></> : <></>}
         <div><h2 style={{fontFamily: 'Noto Kufi Arabic', textAlign: 'center'}}> {post.title} </h2></div>
         <div><p className="m-3" style={{fontFamily: 'Cairo'}}> {post.content} </p></div>
         <div className='flex flex-wrap justify-center'>

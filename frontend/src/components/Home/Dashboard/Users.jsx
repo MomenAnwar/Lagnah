@@ -6,7 +6,6 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { FaRegStar } from "react-icons/fa";
 import { LuMailPlus } from "react-icons/lu";
-import { USER_API } from "../../../APIS";
 import Overlay from 'react-bootstrap/Overlay';
 import Popover from 'react-bootstrap/Popover';
 import { IoSearch } from "react-icons/io5";
@@ -66,7 +65,7 @@ const Users = () => {
     }).then((result) => {
       if (result.isConfirmed) {
 
-        fetch(USER_API + '/' + user1._id, {
+        fetch(import.meta.env.VITE_USER_API + '/' + user1._id, {
           method: 'DELETE',
           credentials: 'include',
         })
@@ -109,7 +108,7 @@ const Users = () => {
       }).then((result) => {
         if (result.isConfirmed) {
   
-          fetch(USER_API + '/admin/' + user1._id, {
+          fetch(import.meta.env.VITE_USER_API + '/admin/' + user1._id, {
             method: 'PUT',
             credentials: 'include',
           })
@@ -150,7 +149,7 @@ const Users = () => {
       }).then((result) => {
         if (result.isConfirmed) {
   
-          fetch(USER_API + '/manager/' + user1._id, {
+          fetch(import.meta.env.VITE_USER_API + '/manager/' + user1._id, {
             method: 'PUT',
             credentials: 'include',
           })
@@ -182,7 +181,7 @@ const Users = () => {
   
     useEffect(()=>{
       setSelectedDashboard('users')
-      fetch(USER_API, {
+      fetch(import.meta.env.VITE_USER_API, {
         credentials: 'include',
       })
       .then(response => response.json())

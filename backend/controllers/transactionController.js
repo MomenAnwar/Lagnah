@@ -13,7 +13,7 @@ const addTransaction = async (req, res) => {
         }
         let cloudinaryResponse = null
         
-        const { amount, seedsType, type, consumers, targetDescription, depositeSource, isFinance, images } = req.body
+        const { amount, seedsType, type, consumers, targetDescription, depositeSource, isFinance, images, isSeeds } = req.body
         const reqAmount = parseInt(amount)
 
         const newTransaction = new Transaction(req.body)
@@ -34,7 +34,11 @@ const addTransaction = async (req, res) => {
             if(isFinance){
                 consumer.financeConsumed += parseInt(consumerShare)
             } else {
-                consumer.seedsConsumed += parseInt(consumerShare)
+                if ( isSeeds){
+                    consumer.seedsConsumed += parseInt(consumerShare)
+                }else {
+                    consumer.meatsConsumed += parseInt(consumerShare)
+                }
             }
 
             if(!newTransaction.consumers){
@@ -77,20 +81,24 @@ const addTransaction = async (req, res) => {
                 finance.totalFinance -= reqAmount
             } else {
 
-                if(!finance.seeds){
-                    return res.status(400).json({success: false, data: 'لا يوجد محاصيل بالخزنة!'})
-                }
-
-                let seed = finance.seeds.find(seed => seed.type === seedsType)
-
-                if(!seed){
-                    return res.status(404).json({success: false, data: 'نوع المحصول غير موجود، برجاء اختيار نوع آخر!'})
-                } else {
-                    if(seed.amount < reqAmount){
-                        return res.status(400).json({success: false, data: 'لا يوجد كمية كافية من هذا المحصول لإتمام العملية!'})
+                if (isSeeds === true){
+                    if(!finance.seeds){
+                        return res.status(400).json({success: false, data: 'لا يوجد محاصيل بالخزنة!'})
                     }
-
-                    seed.amount -= reqAmount
+    
+                    let seed = finance.seeds.find(seed => seed.type === seedsType)
+    
+                    if(!seed){
+                        return res.status(404).json({success: false, data: 'نوع المحصول غير موجود، برجاء اختيار نوع آخر!'})
+                    } else {
+                        if(seed.amount < reqAmount){
+                            return res.status(400).json({success: false, data: 'لا يوجد كمية كافية من هذا المحصول لإتمام العملية!'})
+                        }
+    
+                        seed.amount -= reqAmount
+                    }
+                } else {
+                    finance.meats -= reqAmount
                 }
 
             }
@@ -124,15 +132,18 @@ const addTransaction = async (req, res) => {
             if(isFinance === true){
                 finance.totalFinance += reqAmount
             } else {
-
-                let seed = finance.seeds.find(seed => seed.type === seedsType)
-
-                if(!seed){
-                    finance.seeds.unshift({type: seedsType, amount: reqAmount})
+                if(isSeeds === true){
+                    let seed = finance.seeds.find(seed => seed.type === seedsType)
+    
+                    if(!seed){
+                        finance.seeds.unshift({type: seedsType, amount: reqAmount})
+                    } else {
+                        seed.amount += reqAmount
+                    }
                 } else {
-                    seed.amount += reqAmount
+                    finance.meats += reqAmount
                 }
-            }
+                }
         }        
 
         if(images) {
@@ -142,10 +153,8 @@ const addTransaction = async (req, res) => {
                                 url: res?.secure_url}
                     })
                 }
-                console.log(cloudinaryResponse);
                 
         newTransaction.images = cloudinaryResponse ? await Promise.all(cloudinaryResponse) : []
-        console.log(newTransaction.images);
         
 
 
@@ -174,7 +183,7 @@ const getAllTransactions = async (req, res) => {
         if(!transactions){
             return res.status(404).json({success: false, data: 'حدث خطأ ما, برجاء المحاولة لاحقا!'})
         }
-    res.status(200).json({success: true, data: transactions})
+    res.status(200).json({success: true, data: transactions.reverse()})
     } catch (error) {
         res.status(400).json({success: false, data: error})
     }

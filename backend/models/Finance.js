@@ -13,6 +13,10 @@ const financeSchema = new mongoose.Schema({
             default: 0
         }
     }],
+    meats: {
+        type: Number,
+        default: 0
+    },
     recentTargets: [{
         type: String
     }],

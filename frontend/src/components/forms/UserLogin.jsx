@@ -2,7 +2,6 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Button, TextField} from '@mui/material';
 import { Container } from 'react-bootstrap'
-import { USER_API } from '../../APIS'
 import {  useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import EmailIcon from '@mui/icons-material/Email';
@@ -40,7 +39,7 @@ const UserLogin = () => {
       
             setLoading(true)
       
-            fetch(USER_API + '/login', {method: "POST", 
+            fetch(import.meta.env.VITE_USER_API + '/login', {method: "POST", 
                 headers: { 'Content-Type': 'application/json' }, 
                 body: JSON.stringify({email: values.email, password: values.password}),
                 credentials: 'include'})

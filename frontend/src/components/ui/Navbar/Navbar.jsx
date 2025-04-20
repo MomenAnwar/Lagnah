@@ -46,7 +46,7 @@ const Header = () => {
         <Avatar size={40} className="bg-[#0c969c]">
           {fLetter+sLetter}
           </Avatar>
-        {userData.user?.isAdmin && <Link to="/messages" className="text-[#0c969c] hover:text-[#031716]"><FaRegBell size={25} /></Link>}
+        {userData.user?.isAdmin && <Link to="/messages" className={`${selectedNav === 'messages' && 'bg-[#031716] text-white'} rounded-circle p-1 text-[#0c969c] hover:text-[#031716]`}><FaRegBell size={25} /></Link>}
         <DropdownButton
           id={`dropdown-button-drop`}
           size="sm"

@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import { SetSelected } from '../../../../Contexts/SetSelectedContext';
-import { CONSUMER_API } from '../../../../APIS';
 import { Form, Button, InputGroup, Table, DropdownButton, Dropdown } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { FaTrash } from "react-icons/fa6";
@@ -10,7 +9,7 @@ import { FiUserPlus } from "react-icons/fi";
 import { IoSearch } from 'react-icons/io5';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import { TextField } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import Spinner from 'react-bootstrap/Spinner';
 
 
@@ -23,6 +22,13 @@ const Consumers = () => {
   const [ id, setId] = useState('')
   const [consumers, setConsumers] = useState([])
   const [tableData, setTableData] = useState([])
+  const [teretory, setTeretory] = useState('')
+  const [label, setLabel] = useState('الكل')
+
+
+  const handleTeretoryChange = (event) => {
+    setTeretory(event.target.value);
+  };
   
   
 
@@ -54,7 +60,9 @@ const Consumers = () => {
         childrenCount: yup
         .string()
         .required('عدد الأبناء مطلوب')
-        .matches('^\\d$', 'برجاء إدخال عدد صحيح')
+        .matches('^\\d$', 'برجاء إدخال عدد صحيح'),
+        teretory: yup
+        .string('برجاء إدخال المنطقة')
       });
       
       const formik = useFormik({
@@ -63,7 +71,7 @@ const Consumers = () => {
         onSubmit: (values) => {
           setLoading(true)
           if(editing){
-            fetch(CONSUMER_API + '/' + id, {method: "PUT", 
+            fetch(import.meta.env.VITE_CONSUMER_API + '/' + id, {method: "PUT", 
               headers: { 'Content-Type': 'application/json' }, 
               body: JSON.stringify({name: values.name,
                                     IDNumber: values.IDNumber,
@@ -71,7 +79,8 @@ const Consumers = () => {
                                     age: values.age,
                                     income: values.income,
                                     childrenCount: values.childrenCount,
-                                    partenerName: values.partenerName
+                                    partenerName: values.partenerName,
+                                    teretory: teretory
               }),
               credentials: 'include'})
           .then( res => res.json())
@@ -91,7 +100,7 @@ const Consumers = () => {
                 }
               })
           } else {
-            fetch(CONSUMER_API, {method: "POST", 
+            fetch(import.meta.env.VITE_CONSUMER_API, {method: "POST", 
               headers: { 'Content-Type': 'application/json' }, 
               body: JSON.stringify(values),
               credentials: 'include'})
@@ -116,8 +125,8 @@ const Consumers = () => {
     }});
     
           useEffect(()=> {
-            if(formik.values.name && formik.values.IDNumber && formik.values.phoneNumber && formik.values.partenerName && formik.values.childrenCount && formik.values.income && formik.values.age && 
-              !formik.errors.name && !formik.errors.IDNumber && !formik.errors.phoneNumber && !formik.errors.partenerName && !formik.errors.childrenCount && !formik.errors.income && !formik.errors.age){
+            if(formik.values.name && formik.values.IDNumber && formik.values.phoneNumber && formik.values.partenerName && formik.values.childrenCount && formik.values.income && formik.values.age && formik.values.teretory &&
+              !formik.errors.name && !formik.errors.IDNumber && !formik.errors.phoneNumber && !formik.errors.partenerName && !formik.errors.childrenCount && !formik.errors.income && !formik.errors.age && !formik.errors.teretory){
               setDisableSubmit(false)      
             }
           }, [formik.values, formik.errors])
@@ -145,7 +154,7 @@ const Consumers = () => {
     }).then((result) => {
       if (result.isConfirmed) {
 
-        fetch(CONSUMER_API + '/' + consumer1._id, {
+        fetch(import.meta.env.VITE_CONSUMER_API + '/' + consumer1._id, {
           method: 'DELETE',
           credentials: 'include',
         })
@@ -181,13 +190,21 @@ const Consumers = () => {
     formik.setValues(consumer)
   }
 
+  const filterConsumers = (key, fLimit, sLimit) => {
+    if(key === 'childrenCount'){
+      setTableData(tableData.filter(consumer => parseInt(consumer.childrenCount) === fLimit))
+    } else if(key === 'age'){
+      setTableData(tableData.filter(consumer => parseInt(consumer.age) >= fLimit && parseInt(consumer.age) < sLimit))
+    } else if(key === 'income'){
+      setTableData(tableData.filter(consumer => parseInt(consumer.income) >= fLimit && parseInt(consumer.income) < sLimit))
+  }}
 
 
   const {setSelectedDashboard} = useContext(SetSelected)
   useEffect(()=>{
     setSelectedDashboard('consumers')
 
-    fetch(CONSUMER_API, {credentials: 'include'})
+    fetch(import.meta.env.VITE_CONSUMER_API, {credentials: 'include'})
     .then(res => res.json())
     .then(data => {
         if(data.success){
@@ -280,7 +297,30 @@ const Consumers = () => {
      }}
    />
  </div>
- <div className='col-8 col-md-6 col-lg-3 px-2'>
+
+ <div className='col-6 col-md-6 col-lg-3 px-2'>
+  <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">المنطقة</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={teretory}
+          label="Age"
+          onChange={handleTeretoryChange}
+        >
+          <MenuItem value={'الجامع الكبير بالمقابر'}>الجامع الكبير بالمقابر</MenuItem>
+          <MenuItem value={'المستشفى بالجامع البحرى'}>المستشفى بالجامع البحرى</MenuItem>
+          <MenuItem value={'مركز الشباب وجامع البرجيسى'}>مركز الشباب وجامع البرجيسى</MenuItem>
+          <MenuItem value={'جامع الزاوية'}>جامع الزاوية</MenuItem>
+          <MenuItem value={'الصهريج وجامع عبدالهادى'}>الصهريج وجامع عبدالهادى</MenuItem>
+          <MenuItem value={'جامع التوحيد'}>جامع التوحيد</MenuItem>
+          <MenuItem value={'بوابة آل جاويش'}>بوابة آل جاويش</MenuItem>
+          <MenuItem value={'طريق كوبرى الهدار'}>طريق كوبرى الهدار</MenuItem>
+          <MenuItem value={'جمعية الرحمة وفرن تيسير'}>جمعية الرحمة وفرن تيسير</MenuItem>
+        </Select>
+      </FormControl>
+ </div>
+ <div className='col-6 col-md-6 col-lg-3 px-2'>
    <TextField
      id="phoneNumber"
      name="phoneNumber"
@@ -300,7 +340,7 @@ const Consumers = () => {
      }}
    />
  </div>
- <div className='col-4 col-md-6 col-lg-3 px-2'>
+ <div className='col-4 col-md-6 col-lg-2 px-2'>
    <TextField
      id="income"
      name="income"
@@ -320,7 +360,7 @@ const Consumers = () => {
      }}
    />
  </div>
- <div className='col-6 col-md-6 col-lg-3 px-2'>
+ <div className='col-4 col-md-6 col-lg-2 px-2'>
    <TextField
      id="age"
      name="age"
@@ -340,7 +380,7 @@ const Consumers = () => {
      }}
    />
  </div>
- <div className='col-6 col-md-6 col-lg-3 px-2'>
+ <div className='col-4 col-md-6 col-lg-2 px-2'>
    <TextField
      id="childrenCount"
      name="childrenCount"
@@ -403,7 +443,65 @@ const Consumers = () => {
               />
             </InputGroup>
         </div>
-        <Button onClick={()=> setTableData(consumers)} variant='success' className='mx-3'>الكل</Button>
+        
+        <div className="flex align-items-center">
+        <h1 className="text-center px-3 text-xl">  {label}: {tableData.length}</h1>
+        <DropdownButton id="dropdown-basic-button" variant="success">
+          <Dropdown.Item className="text-end"
+          onClick={()=> {
+            setTableData(consumers)
+            setLabel('الكل')
+          }} >الكل</Dropdown.Item>
+          <Dropdown.Item className="text-end"
+          onClick={()=> {
+            setTableData(consumers?.filter(consumer => consumer.teretory === 'الجامع الكبير بالمقابر'))
+            setLabel(' الجامع الكبير بالمقابر')
+            }} > الجامع الكبير بالمقابر</Dropdown.Item>
+          <Dropdown.Item className="text-end"
+          onClick={()=> {
+            setTableData(consumers?.filter(consumer => consumer.teretory === 'المستشفي بالجامع البحري'))
+            setLabel('المستشفي بالجامع البحري')
+          }} >المستشفي بالجامع البحري</Dropdown.Item>
+          <Dropdown.Item className="text-end"
+          onClick={()=> {
+            setTableData(consumers?.filter(consumer => consumer.teretory === 'مركز الشباب وجامع البرجيسي'))
+            setLabel('مركز الشباب وجامع البرجيسي')
+          }} >مركز الشباب وجامع البرجيسي</Dropdown.Item>
+
+          <Dropdown.Item className="text-end"
+          onClick={()=> {
+            setTableData(consumers?.filter(consumer => consumer.teretory === 'جامع الزاوية'))
+            setLabel('جامع الزاوية')
+            }} >جامع الزاوية</Dropdown.Item>
+          <Dropdown.Item className="text-end"
+          onClick={()=> {
+            setTableData(consumers?.filter(consumer => consumer.teretory === 'الصهريج وجامع عبدالهادي'))
+            setLabel('الصهريج وجامع عبدالهادي')
+          }} >الصهريج وجامع عبدالهادي</Dropdown.Item>
+          <Dropdown.Item className="text-end"
+          onClick={()=> {
+            setTableData(consumers?.filter(consumer => consumer.teretory === 'جامع التوحيد'))
+            setLabel('جامع التوحيد')
+          }} >جامع التوحيد</Dropdown.Item>
+          
+          <Dropdown.Item className="text-end"
+          onClick={()=> {
+            setTableData(consumers?.filter(consumer => consumer.teretory === 'بوابة آل جاويش'))
+            setLabel('بوابة آل جاويش')
+            }} >بوابة آل جاويش</Dropdown.Item>
+          <Dropdown.Item className="text-end"
+          onClick={()=> {
+            setTableData(consumers?.filter(consumer => consumer.teretory === 'طريق كوبري الهدار'))
+            setLabel('طريق كوبري الهدار')
+          }} >طريق كوبري الهدار</Dropdown.Item>
+          <Dropdown.Item className="text-end"
+          onClick={()=> {
+            setTableData(consumers?.filter(consumer => consumer.teretory === 'جمعية الرحمة وفرن تيسير'))
+            setLabel('جمعية الرحمة وفرن تيسير')
+          }} >جمعية الرحمة وفرن تيسير</Dropdown.Item>
+        </DropdownButton>
+        
+      </div>
       </div>
 
         <div className="col-12 overflow-auto">
@@ -419,9 +517,9 @@ const Consumers = () => {
           size="sm"
           variant="s"
         >
-          <Dropdown.Item eventKey="1" onClick={()=>{setTableData(tableData.filter(consumer => parseInt(consumer.childrenCount) === 1))}} className="text-end">1</Dropdown.Item>
-          <Dropdown.Item eventKey="1" onClick={()=>{setTableData(tableData.filter(consumer => parseInt(consumer.childrenCount) === 2))}} className="text-end">2</Dropdown.Item>
-          <Dropdown.Item eventKey="1" onClick={()=>{setTableData(tableData.filter(consumer => parseInt(consumer.childrenCount) === 3))}} className="text-end">3</Dropdown.Item>
+          <Dropdown.Item eventKey="1" onClick={()=>{filterConsumers('childrenCount', 1, 2)}} className="text-end">1</Dropdown.Item>
+          <Dropdown.Item eventKey="1" onClick={()=>{filterConsumers('childrenCount', 2, 3)}} className="text-end">2</Dropdown.Item>
+          <Dropdown.Item eventKey="1" onClick={()=>{filterConsumers('childrenCount', 3, 4)}} className="text-end">3</Dropdown.Item>
           <Dropdown.Item eventKey="1" onClick={()=>{setTableData(tableData.filter(consumer => parseInt(consumer.childrenCount) > 3))}} className="text-end"> أكثر من 3</Dropdown.Item>
         </DropdownButton> </th>
 
@@ -433,9 +531,9 @@ const Consumers = () => {
           size="sm"
           variant="s"
         >
-          <Dropdown.Item eventKey="1" onClick={()=>{setTableData(tableData.filter(consumer => parseInt(consumer.age) <= 20))}} className="text-end">أصغر من 20</Dropdown.Item>
-          <Dropdown.Item eventKey="1" onClick={()=>{setTableData(tableData.filter(consumer => parseInt(consumer.age) > 20 && parseInt(consumer.age) <= 30))}} className="text-end">20 - 30</Dropdown.Item>
-          <Dropdown.Item eventKey="1" onClick={()=>{setTableData(tableData.filter(consumer => parseInt(consumer.age) > 30 && parseInt(consumer.age) <= 40))}} className="text-end">30 - 40</Dropdown.Item>
+          <Dropdown.Item eventKey="1" onClick={()=>{filterConsumers('age', 0, 20)}} className="text-end">أصغر من 20</Dropdown.Item>
+          <Dropdown.Item eventKey="1" onClick={()=>{filterConsumers('age', 20, 30)}} className="text-end">20 - 30</Dropdown.Item>
+          <Dropdown.Item eventKey="1" onClick={()=>{filterConsumers('age', 30, 40)}} className="text-end">30 - 40</Dropdown.Item>
           <Dropdown.Item eventKey="1" onClick={()=>{setTableData(tableData.filter(consumer => parseInt(consumer.age) > 40))}} className="text-end"> أكبر من 40</Dropdown.Item>
         </DropdownButton> </div></th>
 
@@ -445,12 +543,13 @@ const Consumers = () => {
           size="sm"
           variant="s"
         >
-          <Dropdown.Item eventKey="1" onClick={()=>{setTableData(tableData.filter(consumer => parseInt(consumer.income) <= 1000))}} className="text-end">أقل من 1000</Dropdown.Item>
-          <Dropdown.Item eventKey="1" onClick={()=>{setTableData(tableData.filter(consumer => parseInt(consumer.income) <= 2000 && parseInt(consumer.income) > 1000))}} className="text-end">1000 - 2000</Dropdown.Item>
-          <Dropdown.Item eventKey="1" onClick={()=>{setTableData(tableData.filter(consumer => parseInt(consumer.income) <= 3000 && parseInt(consumer.income) > 2000))}} className="text-end">2000 - 3000</Dropdown.Item>
+          <Dropdown.Item eventKey="1" onClick={()=>{filterConsumers('income', 0, 1000)}} className="text-end">أقل من 1000</Dropdown.Item>
+          <Dropdown.Item eventKey="1" onClick={()=>{filterConsumers('income', 1000, 2000)}} className="text-end">1000 - 2000</Dropdown.Item>
+          <Dropdown.Item eventKey="1" onClick={()=>{filterConsumers('income', 2000, 3000)}} className="text-end">2000 - 3000</Dropdown.Item>
           <Dropdown.Item eventKey="1" onClick={()=>{setTableData(tableData.filter(consumer => parseInt(consumer.income) > 3000))}} className="text-end">أكثر من 3000 </Dropdown.Item>
         </DropdownButton> </th>
 
+          <th> المنطقة </th>
           <th> استهلاك نقدى </th>
           <th> استهلاك زروع </th>
           <th> إجراءات </th>
@@ -468,6 +567,7 @@ const Consumers = () => {
               <td className="text-ellipsis">{consumer.phoneNumber}</td>
               <td className="text-ellipsis">{consumer.age}</td>
               <td className="text-ellipsis">{consumer.income}</td>
+              <td className="text-ellipsis">{consumer.teretory || '-' }</td>
               <td className="text-ellipsis">{consumer.financeConsumed || 0}</td>
               <td className="text-ellipsis">{consumer.seedsConsumed || 0}</td>
             

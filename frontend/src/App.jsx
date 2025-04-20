@@ -13,10 +13,11 @@ import Safe from './components/Home/Dashboard/Safe'
 import Users from './components/Home/Dashboard/Users'
 import Transactions from './components/Home/Dashboard/Transactions/Transactions'
 import AddTransaction from './components/Home/Dashboard/Transactions/AddTransaction'
-import ProtectedRoutes from './Utils/ProtectedRoutes'
+// import ProtectedRoutes from './Utils/ProtectedRoutes'
 import Main from './components/Home/Main'
 import ProtectAdminRoutes from './Utils/ProtectAdminRoutes'
 import Messages from './components/Home/Messages'
+
 
 
 function App() {
@@ -26,9 +27,12 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} >
 
-          <Route path='/posts' element={<ProtectedRoutes>
+          <Route path='/posts' element={ <Posts /> } />
+
+
+          {/* <Route path='/posts' element={<ProtectedRoutes>
                                           <Posts />
-                                        </ProtectedRoutes>} />
+                                        </ProtectedRoutes>} /> */}
 
           <Route index element={<Main />} />
             <Route path='/dashboard' element={<ProtectAdminRoutes>
@@ -48,15 +52,21 @@ function App() {
               <Route path='users' element={<Users />} />
             </Route>
 
-          <Route path='/contact' element={<ProtectedRoutes >
+          <Route path='/contact' element={ <Contact /> } />
+
+
+          {/* <Route path='/contact' element={<ProtectedRoutes >
                                             <Contact />
                                           </ProtectedRoutes>
-            } />
+            } /> */}
 
-          <Route path='/messages' element={<ProtectedRoutes >
+          <Route path='/messages' element={<Messages />} />
+
+
+          {/* <Route path='/messages' element={<ProtectAdminRoutes >
                                             <Messages />
-                                          </ProtectedRoutes>
-            } />
+                                          </ProtectAdminRoutes>
+            } /> */}
                           
 
         </Route>

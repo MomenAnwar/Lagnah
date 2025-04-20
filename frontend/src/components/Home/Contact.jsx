@@ -1,6 +1,5 @@
 import { Button } from '@mui/material';
 import { Container, FloatingLabel, Form } from 'react-bootstrap'
-import { MESSAGE_API } from '../../APIS'
 import { useContext, useEffect, useState } from 'react';
 import MessageIcon from '@mui/icons-material/Message';
 import Swal from 'sweetalert2'
@@ -30,7 +29,7 @@ const Contact = () => {
     const handleSubmit = (e) => {
       e.preventDefault()
       setLoading(true)
-        fetch(MESSAGE_API, {
+        fetch(import.meta.env.VITE_MESSAGE_API, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' }, 
           body: JSON.stringify({content: message}),

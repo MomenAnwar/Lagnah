@@ -2,7 +2,6 @@ import { Empty, Image, Typography } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { SetSelected } from "../../../../Contexts/SetSelectedContext";
-import { TRANSACTION_API } from "../../../../APIS";
 import Swal from "sweetalert2";
 import { Button, Form, InputGroup, Spinner } from "react-bootstrap";
 import { TbDeviceIpadDollar } from "react-icons/tb";
@@ -21,7 +20,7 @@ const Transactions = () => {
     useEffect(()=>{
       setSelectedDashboard('transactions')
 
-      fetch(TRANSACTION_API, {credentials: 'include'})
+      fetch(import.meta.env.VITE_TRANSACTION_API, {credentials: 'include'})
       .then(res => res.json())
       .then(data => {
           if(data.success){
@@ -91,7 +90,7 @@ const Transactions = () => {
           <hr />
           <div className="flex justify-center align-items-center p-12">
             <span className="text-white rounded-full py-2 col-9 col-md-10 text-center" style={{backgroundImage: 'linear-gradient(135deg, #031716, #0c969c)'}}>
-                            {transaction.amount}{transaction.isFinance? "ج م": "كجم"} {transaction.seedsType || ''}</span>
+                            {transaction.amount}{transaction.isFinance? "ج م": ` كجم ${transaction.seedsType || 'لحوم' }  `}</span>
           </div>
           <hr />
           <div className="p-3">
@@ -121,7 +120,7 @@ const Transactions = () => {
                       </thead>
                       <tbody>
                 {transaction.consumers.map((consumer, i) => {
-                  if (i >= transaction.consumers.length/2 - 1){
+                  if (i >= transaction.consumers.length/2){
                     return(<></>)
                   }
                   return(

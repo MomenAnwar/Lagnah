@@ -9,6 +9,7 @@ const validateConsumer = (obj) => {
         childrenCount: Joi.number().required().integer().positive(),
         income: Joi.number().positive(),
         age: Joi.number().positive().integer(),
+        teretory: Joi.string().trim().required()
     })
     return schema.validate(obj)
 }
@@ -23,7 +24,8 @@ const validateTransaction = (obj) => {
         targetDescription: Joi.string().trim(),
         consumers: Joi.array(),
         seedsType: Joi.string().trim(),
-        images: Joi.array()
+        images: Joi.array(),
+        isSeeds: Joi.boolean()
     })
     return schema.validate(obj)
 }

@@ -4,7 +4,6 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import Swal from 'sweetalert2';
 import { useEffect, useState } from 'react';
-import { TRANSACTION_API } from '../../../../APIS';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import MobileStepper from '@mui/material/MobileStepper';
@@ -27,6 +26,7 @@ const AddTransaction = () => {
   const [consumers, setRows] = useState([{id: '', share: ''}])
   const [type, setType] = useState('')
   const [isFinance, setIsFinance] = useState('')
+  const [isSeeds, setIsSeeds] = useState('')
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate()
@@ -89,12 +89,12 @@ const AddTransaction = () => {
   
         setLoading(true)
   
-  fetch(TRANSACTION_API, {method: "POST", 
+  fetch(import.meta.env.VITE_TRANSACTION_API, {method: "POST", 
             headers: { 'Content-Type': 'application/json' }, 
             body: JSON.stringify({amount: values.amount, 
                                   type, 
                                   isFinance,
-                                  ...(!isFinance && {seedsType: values.seedsType}),
+                                  ...(!isFinance && {seedsType: values.seedsType, isSeeds}),
                                   ...(type === 'outgoing' ? {targetDescription: values.targetDescription, consumers} : {depositeSource: values.depositeSource}),
                                   ...(files.length > 0 && {images: files})
                                 }),
@@ -133,7 +133,8 @@ const AddTransaction = () => {
           onChange={handleFinanceChange}
         >
           <MenuItem value={true}>نقدى</MenuItem>
-          <MenuItem value={false}>زروع</MenuItem>
+          <MenuItem value={false} onClick={() => setIsSeeds(true)}>زروع</MenuItem>
+          <MenuItem value={false} onClick={() => setIsSeeds(false)}>لحوم</MenuItem>
         </Select>
       </FormControl>
       <FormControl fullWidth>
@@ -210,7 +211,7 @@ const AddTransaction = () => {
           }}
         />}
       </div>
-      {!isFinance && <div className='col-12 col-md-6 col-lg-2 px-2'>
+      {(!isFinance && isSeeds === true) && <div className='col-12 col-md-6 col-lg-2 px-2'>
         <TextField
           id="seedsType"
           name="seedsType"

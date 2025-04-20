@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react"
-import { MESSAGE_API } from "../../APIS"
+import { useContext, useEffect, useState } from "react"
 import { Container, Spinner, Table } from "react-bootstrap"
+import { SetSelected } from "../../Contexts/SetSelectedContext"
 
 const Messages = () => {
 
     const [messages, setMessages] = useState([])
     const [loading, setLoading] = useState(true)
+    const {setSelectedNavbar} = useContext(SetSelected)
 
     useEffect(() => {
-        fetch(MESSAGE_API, {
+        setSelectedNavbar('messages')
+        fetch(import.meta.env.VITE_MESSAGE_API, {
             credentials: 'include'
         })
         .then(response => response.json())

@@ -37,6 +37,13 @@ const consumerSchema = new mongoose.Schema({
     seedsConsumed: {
         type: Number,
         default: 0
+    },
+    meatsConsumed: {
+        type: Number,
+        default: 0
+    },
+    teretory: {
+        type: String
     }
 }, {
     timestamps: true
