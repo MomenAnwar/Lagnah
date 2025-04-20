@@ -18,7 +18,7 @@ const app = express()
 app.use(express.json({limit: '10mb'}))
 app.use(express.urlencoded({limit: '10mb', extended: true}))
 app.use(cors({
-    origin: [process.env.FRONTEND_URL, 'https://lagnah.vercel.app'], 
+    origin: [process.env.FRONTEND_URL, 'https://lagnah-90o7svmig-momenanwars-projects.vercel.app/posts'], 
     credentials: true
 }))
 app.use(cookieParser())
