@@ -43,6 +43,6 @@ mongoose.connect(process.env.DATA_BASE_URL).then(()=> {
 const port = process.env.PORT || 4000
 
 
-app.listen(port, ()=> {
+app.listen(port, '0.0.0.0', ()=> {
     console.log(`Running on port ${port}`)
 })
