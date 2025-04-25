@@ -9,8 +9,10 @@ const sendMessage = async (req, res) => {
         if(error){
             return res.status(400).json({success: false, data: error})
         }
+
+        const senderId = req.user || ' مجهول الهوية '
         
-        const newMessage = new Message({sender: req.user, ...req.body})
+        const newMessage = new Message({sender: senderId, ...req.body})
 
         const sender = await User.findById(req.user)
 

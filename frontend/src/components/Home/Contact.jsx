@@ -56,28 +56,25 @@ const Contact = () => {
 
   
   
-  
-
-
   return (
     <div style={{ backgroundImage: `url('https://lagnah.vercel.app/wallpaper/wallpaper.jpg')`, backgroundSize: 'cover', width: '100%', height: 'calc(100vh - 88px'}  }
       className='flex align-items-center'>
     <Container>
-      <div className='p-3 flex-row flex-wrap bg-white flex col-12 col-md-7 mx-auto justify-around rounded align-items-center' style={{height: '500px'}}>
-        <div className='col-12 col-md-6'>
+      <div className='flex-row flex-wrap bg-white flex col-12 justify-center p-5 rounded align-items-center'>
+        <div className='col-6 col-md-6'>
           <img src="https://lagnah.vercel.app/assets/contact.jpg" alt="" className='fluid'/>
         </div>
 
 
-      <form onSubmit={handleSubmit} className='col-12 col-md-5 flex gap-4 flex-col' dir='rtl'>
+      <form onSubmit={handleSubmit} className='col-12 col-md-5 mx-auto flex gap-2 flex-col align-items-center'>
 
       <div className='flex'>
         <MessageIcon className='ml-2'/>
-        <FloatingLabel controlId="floatingTextarea2" label="شاركنا رأيك..." className='ml-auto mr-0 text-right'>
+        <FloatingLabel controlId="floatingTextarea2" className='contactArea' label="شاركنا رأيك...">
         <Form.Control
           as="textarea"
           placeholder="Leave a comment here"
-          style={{ height: '300px', width: '250px' }}
+          style={{height: '250px', width: '250px'}}
           value={message}
           onChange= {(e) => {            
             setMessage(e.target.value)
@@ -91,11 +88,14 @@ const Contact = () => {
           color="success" 
           variant="contained" 
           type="submit" 
-          className={`${loading && 'opacity-50'} mx-auto col-md-6`}
+          className={`${loading && 'opacity-50'}`}
           disabled = { disabled }
           >
           {!loading?'إرسال' : 'جارى الإرسال...'}
         </Button>
+        <p className='text-green-600 text-sm pt-1' style={{borderTop: 'solid 1px blue'}}>
+          *لتجنب الرسائل الغير مهمة، يجب أن تكون الرسالة 50 حرفا فأكثر، ويرجى إضافة كافة التفاصيل الضرورية للمساعدة مثل رقم الهاتف أو العنوان.
+        </p>
         
       </form>
       </div>

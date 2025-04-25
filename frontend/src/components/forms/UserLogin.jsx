@@ -134,7 +134,7 @@ const UserLogin = () => {
           {!loading?'تسجيل الدخول' : 'جارى التحميل...'}
         </Button>
         <hr className='w-2/3 mx-auto bg-black' />
-        <div className='mx-auto'> ليس لديك حساب؟  <Link to="/register" className='text-green-600 underline'> أنشأ حسابك </Link> </div>
+        <div className='mx-auto'> ليس لديك حساب؟  <Link to="/register" className='text-green-600 underline'> أنشئ حسابك </Link> </div>
         
       </form>
     </Container>

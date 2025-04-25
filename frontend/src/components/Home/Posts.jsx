@@ -1,4 +1,4 @@
-import { Button, Container, Form, InputGroup, ListGroup, Overlay, Popover, Spinner } from "react-bootstrap"
+import { Button, Form, InputGroup, ListGroup, Overlay, Popover, Spinner } from "react-bootstrap"
 import { useContext, useEffect, useRef, useState } from "react"
 import { SetSelected } from "../../Contexts/SetSelectedContext"
 import { MdEditNote, MdOutlinePostAdd } from "react-icons/md";
@@ -13,6 +13,8 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { TiDeleteOutline } from "react-icons/ti";
 import { IoSearch } from "react-icons/io5";
 import { MdCancel } from "react-icons/md";
+import { FaArrowLeftLong } from "react-icons/fa6";
+
 
 
 
@@ -39,8 +41,13 @@ const [target, setTarget] = useState(null); // Tracks the target element for the
 const ref = useRef([]); // Stores refs for all posts
 
 const handleClick = (postId, event) => {
-  setActiveOverlay(postId); // Set the active post's ID
-  setTarget(event.target); // Set the target for the overlay
+  if(activeOverlay === postId){
+    handleClose()
+  } else {
+    setActiveOverlay(postId); // Set the active post's ID
+    setTarget(event.target);   // Set the target for the overlay
+  }
+
 };
 
 const handleClose = () => {
@@ -222,11 +229,11 @@ const deletepost = (id) => {
         }
 
   return (
-    <div className="p-2">
-      <Container>
-        <div className="bg-[#eee] p-2 flex flex-col lg:flex-row rounded-lg">
+    <div>
+      <div className="md:container">
+        <div className="bg-[#eee] p-1 flex flex-col lg:flex-row rounded-lg">
 
-          <div className="col-12 col-lg-4 p-2 flex-col flex gap-2">
+          <div className="col-12 col-lg-4 p-1 flex-col flex gap-1">
           <div>
       <InputGroup dir="ltr">
         <Button variant="outline-secondary" id="button-addon1">
@@ -249,7 +256,8 @@ const deletepost = (id) => {
             > {posting? 'رجوع' : 'إضافة منشور '} <MdOutlinePostAdd className="inline"/></Button>
             
             <div className={`${posting || editing ? 'block' : 'hidden'}`}>
-        <form className="flex flex-wrap bg-white p-2 rounded-lg gap-y-3" onSubmit={formik.handleSubmit}>
+        <form className="flex flex-wrap relative bg-white p-2 rounded-lg gap-y-3" onSubmit={formik.handleSubmit}>
+          {editing && <FaArrowLeftLong className="absolute left-4" onClick={()=> setEditnig(false)} />}
             <div className='col-12 px-2'>
                 <TextField
                 id="title"
@@ -321,10 +329,10 @@ const deletepost = (id) => {
 
           </div>
         
-        <div className="bg-[#eee] flex flex-col gap-3 col-12 col-lg-8 p-2">
+        <div className="bg-[#eee] flex flex-col gap-1 col-12 col-lg-8 ">
           {activePosts.map((post, index) =>
             {
-            return (<div key={post._id} className="bg-white rounded-lg p-3 relative" ref={(el) => (ref.current[index] = el)}>
+            return (<div key={post._id} className="bg-white rounded-lg p-1 relative" ref={(el) => (ref.current[index] = el)}>
             {!userData.user? <></> : userData.user.isAdmin ? <>
               <BsThreeDotsVertical className='cursor-pointer absolute' onClick={(event) => handleClick(post._id, event)} />
       <Overlay
@@ -344,7 +352,7 @@ const deletepost = (id) => {
         </Popover>
       </Overlay></> : <></>}
         <div><h2 style={{fontFamily: 'Noto Kufi Arabic', textAlign: 'center'}}> {post.title} </h2></div>
-        <div><p className="m-3" style={{fontFamily: 'Cairo'}}> {post.content} </p></div>
+        <div><p style={{fontFamily: 'Cairo'}}> {post.content} </p></div>
         <div className='flex flex-wrap justify-center'>
           {post.images?.map((img, i) => (
             <div className='p-1' key={i}>
@@ -355,7 +363,7 @@ const deletepost = (id) => {
     </div>)})}
         </div>
         </div>
-      </Container>
+      </div>
     </div>
   )
 }

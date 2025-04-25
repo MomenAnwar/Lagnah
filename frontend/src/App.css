@@ -1,1 +1,4 @@
-
+.contactArea label {
+    right: 0;
+    left: auto;
+}
