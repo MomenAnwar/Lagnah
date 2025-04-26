@@ -28,7 +28,7 @@ const Messages = () => {
     
   return (
     <div>
-        <Container className="p-4">
+        <Container className="p-4 overflow-auto">
             <Table striped bordered hover>
                 <thead>
                     <tr>

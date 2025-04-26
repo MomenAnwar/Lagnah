@@ -332,7 +332,7 @@ const deletepost = (id) => {
         <div className="bg-[#eee] flex flex-col gap-1 col-12 col-lg-8 ">
           {activePosts.map((post, index) =>
             {
-            return (<div key={post._id} className="bg-white rounded-lg p-1 relative" ref={(el) => (ref.current[index] = el)}>
+            return (<div key={post._id} className="bg-white rounded-lg p-2 relative min-w-80" ref={(el) => (ref.current[index] = el)}>
             {!userData.user? <></> : userData.user.isAdmin ? <>
               <BsThreeDotsVertical className='cursor-pointer absolute' onClick={(event) => handleClick(post._id, event)} />
       <Overlay
@@ -351,7 +351,7 @@ const deletepost = (id) => {
           </Popover.Body>
         </Popover>
       </Overlay></> : <></>}
-        <div><h2 style={{fontFamily: 'Noto Kufi Arabic', textAlign: 'center'}}> {post.title} </h2></div>
+        <div><h2 style={{fontFamily: 'Noto Kufi Arabic', textAlign: 'center', fontWeight: '700', fontSize: '1.5em'}}> {post.title} </h2></div>
         <div><p style={{fontFamily: 'Cairo'}}> {post.content} </p></div>
         <div className='flex flex-wrap justify-center'>
           {post.images?.map((img, i) => (

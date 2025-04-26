@@ -12,6 +12,8 @@ export default function Dashboard() {
 
   const {selectedDash, setSelectedNavbar} = useContext(SetSelected)
 
+  const navClassName = 'cursor-pointer hover:text-[#0c969c] rounded px-2 py-1'
+
   const navigate = useNavigate()
 
       useEffect(()=>{
@@ -25,20 +27,20 @@ export default function Dashboard() {
       <div className='flex p-3 bg-[#FAF9F6] gap-2 flex-col lg:flex-row'>
 
       <div className="bg-white rounded-lg col-lg-2 col-12 flex">
-            <ul className='flex lg:flex-col sm:text-lg text-xs lg:p-3 gap-2 w-full justify-around lg:justify-normal p-2' style={{fontFamily: 'Noto Kufi Arabic'}}>
-              <div className={`cursor-pointer hover:text-[#0c969c] rounded px-2 py-1 ${selectedDash === 'consumers' && 'text-white bg-[#0c969c]'}`}
+            <ul className='flex lg:flex-col sm:text-lg text-sm lg:p-3 gap-2 w-full justify-around lg:justify-normal p-2' style={{fontFamily: 'Noto Kufi Arabic'}}>
+              <div className={`${navClassName} ${selectedDash === 'consumers' && 'text-white bg-[#0c969c]'}`}
                     onClick={()=>navigate('consumers')}>
                     <GrGroup className='ml-2 hidden md:inline'/>  المستفيدين
               </div>
-              <div className={`cursor-pointer hover:text-[#0c969c] rounded px-2 py-1 ${selectedDash === 'safe' && 'text-white bg-[#0c969c]'}`}
+              <div className={`${navClassName} ${selectedDash === 'safe' && 'text-white bg-[#0c969c]'}`}
                     onClick={()=>navigate('safe')}>
                     <GrMoney className='ml-2 hidden md:inline'/>  الخزينة
               </div>
-              <div className={`cursor-pointer hover:text-[#0c969c] rounded px-2 py-1 ${selectedDash === 'transactions' && 'text-white bg-[#0c969c]'}`}
+              <div className={`${navClassName} ${selectedDash === 'transactions' && 'text-white bg-[#0c969c]'}`}
                     onClick={()=>navigate('transactions')}>
                     <TbArrowsDoubleNeSw className='ml-2 hidden md:inline'/>  التحويلات
               </div>
-              <div className={`cursor-pointer hover:text-[#0c969c] rounded px-2 py-1 ${selectedDash === 'users' && 'text-white bg-[#0c969c]'}`}
+              <div className={`${navClassName} ${selectedDash === 'users' && 'text-white bg-[#0c969c]'}`}
                     onClick={()=>navigate('users')}> 
                     <FaUsersRectangle className='ml-2 hidden md:inline'/>  المستخدمين
               </div>

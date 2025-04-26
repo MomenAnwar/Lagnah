@@ -1,5 +1,5 @@
 const express = require('express')
-const { protectManagerRoute, protectRoute } = require('../middlewares/protectRoute')
+const { protectManagerRoute } = require('../middlewares/protectRoute')
 const { getAllMessages, readMessage, getSingleMessage, sendMessage } = require('../controllers/messageController')
 
 const Router = express.Router()
@@ -10,7 +10,7 @@ Router.route('/:id').get(protectManagerRoute, getSingleMessage)
 
 
 Router.route('/').get(protectManagerRoute, getAllMessages)
-                .post(protectRoute, sendMessage)
+                .post(sendMessage)
 
 
 module.exports = Router

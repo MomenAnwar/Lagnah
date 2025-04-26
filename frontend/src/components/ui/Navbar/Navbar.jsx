@@ -32,6 +32,7 @@ const Header = () => {
             buttonsStyling: false
           });
 
+  const navClassName = 'p-1 sm:text-lg rounded-lg text-nowrap sm:px-3 hover:text-[#0c969c]'
 
   return (
   <div style={{position: 'sticky', top: '0', boxShadow: '0px 1px 10px 0px #999', backgroundColor: "white", zIndex: '10'}}>  
@@ -86,10 +87,10 @@ const Header = () => {
       <Navbar.Toggle style={{border: 'none'}} />
       <Navbar.Collapse>
         <ul className="mb-4 flex-row mx-auto gap-1 flex text-[#031716]" style={{fontFamily: 'Cairo', fontSize: '18px'}}>
-          <Link to="/" className={`${selectedNav === 'main' && 'bg-[#0c969c] text-white'} p-1 text-xs sm:text-lg rounded-lg text-nowrap sm:px-3 hover:text-[#0c969c]`}> الرئيسية </Link>
-          <Link to="/posts" className={`${selectedNav === 'posts' && 'bg-[#0c969c] text-white'} p-1 text-xs sm:text-lg rounded-lg text-nowrap sm:px-3 hover:text-[#0c969c]`}> المنشورات </Link>
-          {userData.user?.isAdmin && <Link to="/dashboard/consumers" className={`${selectedNav === 'dashboard' && 'bg-[#0c969c] text-white'} p-1 text-xs sm:text-lg rounded-lg text-nowrap sm:px-3 hover:text-[#0c969c]`}> لوحة التحكم </Link>}
-          <Link to="/contact" className={`${selectedNav === 'contact' && 'bg-[#0c969c] text-white'} p-1 text-xs sm:text-lg rounded-lg text-nowrap sm:px-3 hover:text-[#0c969c]`}> تواصل معنا </Link>
+          <Link to="/" className={`${selectedNav === 'main' && 'bg-[#0c969c] text-white'} ${navClassName} `}> الرئيسية </Link>
+          <Link to="/posts" className={`${selectedNav === 'posts' && 'bg-[#0c969c] text-white'} ${navClassName} `}> المنشورات </Link>
+          {userData.user?.isAdmin && <Link to="/dashboard/consumers" className={`${selectedNav === 'dashboard' && 'bg-[#0c969c] text-white'} ${navClassName} `}> لوحة التحكم </Link>}
+          <Link to="/contact" className={`${selectedNav === 'contact' && 'bg-[#0c969c] text-white'} ${navClassName} `}> تواصل معنا </Link>
         </ul>
       </Navbar.Collapse>
     </Navbar>

@@ -2,3 +2,8 @@
     right: 0;
     left: auto;
 }
+
+td, th {
+    text-wrap: nowrap;
+    text-align: center;
+}
