@@ -9,15 +9,19 @@ const sendMessage = async (req, res) => {
         if(error){
             return res.status(400).json({success: false, data: error})
         }
-
-        const senderId = req.user || ' مجهول الهوية '
         
-        const newMessage = new Message({sender: senderId, ...req.body})
+        const newMessage = new Message(req.body)
+        let senderID = req.user || null
 
-        const sender = await User.findById(req.user)
 
-        sender.messages?.unshift(newMessage._id)
-        await Promise.all([newMessage.save(), sender.save()])
+        newMessage.sender = senderID
+        const sender = await User.findById(senderID)
+        if(sender){
+           sender.messages?.unshift(newMessage._id) 
+           await sender.save()
+        }
+        
+        await newMessage.save()
 
         res.status(200).json({success: true, data: 'تم إرسال الرسالة، شكرا لمشاركتنا رأيك.'})
     } catch (error) {
