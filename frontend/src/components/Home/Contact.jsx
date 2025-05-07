@@ -13,12 +13,14 @@ const Contact = () => {
     const [ message, setMessage] = useState('')
     const [ disabled, setDisabled] = useState(true)
 
-      const {setSelectedNavbar} = useContext(SetSelected)
+    const {setSelectedNavbar} = useContext(SetSelected)
+
+    const minMessageLength = 50
     
           
     useEffect(()=> {
       setSelectedNavbar('contact')
-      if(message.length >= 50){
+      if(message.length >= minMessageLength){
         setDisabled(false)
       } else {
         setDisabled(true)
@@ -94,7 +96,7 @@ const Contact = () => {
           {!loading?'إرسال' : 'جارى الإرسال...'}
         </Button>
         <p className='text-green-600 text-sm pt-1' style={{borderTop: 'solid 1px blue'}}>
-          *لتجنب الرسائل الغير مهمة، يجب أن تكون الرسالة 50 حرفا فأكثر، ويرجى إضافة كافة التفاصيل الضرورية للمساعدة مثل رقم الهاتف أو العنوان.
+          *لتجنب الرسائل الغير مهمة، يجب أن تكون الرسالة {minMessageLength} حرفا فأكثر، ويرجى إضافة كافة التفاصيل الضرورية للمساعدة مثل رقم الهاتف أو العنوان.
         </p>
         
       </form>

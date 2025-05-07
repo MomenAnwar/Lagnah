@@ -42,8 +42,8 @@ const Messages = () => {
                     {messages.map((message, index) => (
                         <tr key={message._id}>
                             <td>{index + 1}</td>
-                            <td>{message.sender.name}</td>
-                            <td>{message.sender.email}</td>
+                            <td>{message.sender?.name || ' مجهول '}</td>
+                            <td>{message.sender?.email || ' مجهول '}</td>
                             <td>{message.content}</td>
                         </tr>
                     ))}
